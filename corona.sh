@@ -58,7 +58,7 @@ IsDateCorrect() {
     #very very very slow
     if [ ! `date -d "$1" +$2` ];
     then
-        CallError "[TODO ERROR] Wrong time format: "$1;
+        CallError "Wrong time format: "$1;
     fi
 }
 
@@ -100,7 +100,7 @@ FindParams() {
                     c=true;
                     COMMAND=$1;
                 else 
-                    CallError "[TODO ERROR] Only one command PLEASE";
+                    CallError "Only one command PLEASE";
                 fi
                 ;;
             -a ) 
@@ -112,7 +112,7 @@ FindParams() {
                     TIMEAFTER=$1;
                     IsDateCorrect $TIMEAFTER %Y-%m-%d;
                 else 
-                    CallError "[TODO ERROR] Only one -a paraPAPAm";
+                    CallError "Only one -a paraPAPAm";
                 fi
                 ;;
             -b ) 
@@ -124,7 +124,7 @@ FindParams() {
                     TIMEBEFORE=$1;
                     IsDateCorrect $TIMEBEFORE %Y-%m-%d;
                 else 
-                    CallError "[TODO ERROR] Only one -b paraPAPAm";
+                    CallError "Only one -b paraPAPAm";
                 fi
                 ;;
             -s )
@@ -141,7 +141,7 @@ FindParams() {
                         WIDTH=-1;
                     fi
                 else
-                    CallError "[TODO ERROR] Only one -s";
+                    CallError "Only one -s";
                 fi
                 ;;
             -g )
@@ -154,10 +154,10 @@ FindParams() {
                         shift;
                         i=$((i + 1));
                     else
-                        CallError "[TODO ERROR] -g needs gender (M|Z)";
+                        CallError "-g needs gender (M|Z)";
                     fi
                 else
-                    CallError "[TODO ERROR] Only one -g";
+                    CallError "Only one -g";
                 fi
                 ;;
             -d )
