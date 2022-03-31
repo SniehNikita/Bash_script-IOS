@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# corona.sh
+# Řešení IOS PROJ 1, 25.3.2022
+# Autor: Nikita Sniehovskyi, FIT
+
+
+
+POSIXLY_CORRECT=yes
 
 
 
@@ -9,7 +16,7 @@ Helper() {
     echo ""
     echo "corona [-h] [FILTERS] [COMMAND] [LOG [LOG2 [...]]"
     echo ""
-	echo "COMMAND může být jeden z:"
+    echo "COMMAND může být jeden z:"
     echo "  infected — spočítá počet nakažených."
     echo "  merge — sloučí několik souborů se záznamy do jednoho, zachovávající původní pořadí (hlavička bude ve výstupu jen jednou)."
     echo "  gender — vypíše počet nakažených pro jednotlivá pohlaví."
@@ -48,6 +55,7 @@ CallError() {
 
 # Checks date, given as $1, according to the format, given as $2
 IsDateCorrect() {
+    #very very very slow
     if [ ! `date -d "$1" +$2` ];
     then
         CallError "[TODO ERROR] Wrong time format: "$1;
@@ -198,6 +206,9 @@ PrintParams() {
 #
 VariablesDeclaration() {
     case $COMMAND in
+        "merge" )
+            commandFunction=null;
+            ;;
         "infected" )
             INFECTED=0;
             commandFunction=Infected;
@@ -566,8 +577,6 @@ Regions() {
 
 
 Counter() {
-    #echo -n "#"
-
     IFS=","
     read -a arr <<< $2
     IFS=$ogIFS
@@ -597,6 +606,7 @@ Counter() {
     then
         $1; #calls function
     fi
+
 }
 
 
@@ -607,28 +617,23 @@ ReadFromFile() {
     file=$2;
     if [[ $2 =~ .*\.bz2$ ]]
     then
-        catter=bzcat;
+        var=`bzcat $2 | awk 'BEGIN { RS = "\n" } {print $0} '`
     elif [[ $2 =~ .*\.gz$ ]]
     then
-        catter=zcat;
-    elif [[ ! $2 = "" ]]
-    then
-        catter=cat;
+        var=`zcat $2 | awk 'BEGIN { RS = "\n" } {print $0} '`
     else
-        catter=-/dev/stdin;
+        var=`cat $2 | awk 'BEGIN { RS = "\n" } {print $0} '`
     fi
+    var="${var#*$'\n'}"
 
-    local i=1;
-    for line in $($catter $file); do
-        #echo -n "#"
-        if [[ $i = 1 ]]
-        then 
-            i=2
-            continue;        
-        fi
-
-        Counter $1 $line
-    done
+    
+    #echo -n "#"
+    if [[ ! $COMMAND = "merge" ]]
+    then
+        for line in $var; do Counter $1 $line; done
+    else
+        for line in $var; do echo $line; done
+    fi
 }
 
 
@@ -645,14 +650,14 @@ ReadFromStdin() {
             continue;        
         fi
 
-        Counter $1 $line
+        if [[ ! $COMMAND = "merge" ]]
+        then
+            Counter $1 $line
+        else
+            echo $line;
+        fi
     done < "${123:-/dev/stdin}" # reads from stdin
 }
-
-
-
-
-
 
 
 
@@ -673,6 +678,11 @@ Main() {
     FindParams $@;
     VariablesDeclaration;
 
+
+    if [[ $COMMAND = "merge" ]]
+    then
+        echo "id,datum,vek,pohlavi,kraj_nuts_kod,okres_lau_kod,nakaza_v_zahranici,nakaza_zeme_csu_kod,reportovano_khs"
+    fi        
 
     # if input is in stdin, in array will be nothing to send
     if [[ ${#inputFileNames[@]} > 0 ]]
