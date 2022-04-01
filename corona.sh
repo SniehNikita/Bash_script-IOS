@@ -381,7 +381,7 @@ Infected() {
 
 
 Gender() {
-    res=$($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'BEGIN {m = 0;z = 0} NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { if ($4 == "M") m++; else z++ } }
+    res=$($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'BEGIN {m = 0;z = 0} NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { if ($4 == "M") m++; else z++ } }
     END {
         print m","z;
     }')
@@ -393,7 +393,7 @@ Gender() {
 
 
 Age() {
-    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($3) != 0) ? $3 : "None";} }'); do
+    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($3) != 0) ? $3 : "None";} }'); do
         keyValueArray[$line]=$((keyValueArray[$line]+1))
     done
 }
@@ -402,14 +402,14 @@ Age() {
 
 
 Merge() {
-    $1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print $1","$2","$3","$4","$5","$6","$7","$8","$9} }'
+    $1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print $1","$2","$3","$4","$5","$6","$7","$8","$9} }'
 }
 
 
 
 
 Daily() {
-    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($2) != 0) ? $2 : "None";} }'); do
+    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($2) != 0) ? $2 : "None";} }'); do
         keyValueArray[$line]=$((keyValueArray[$line]+1))
     done
 }
@@ -418,7 +418,7 @@ Daily() {
 
 
 Monthly() {
-    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($2) != 0) ? $2 : "None";} }' | awk -F "-" '{ print (length($1)+length($2) != 0) ? $1"-"$2 : "None"; }'); do
+    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($2) != 0) ? $2 : "None";} }' | awk -F "-" '{ print (length($1)+length($2) != 0) ? $1"-"$2 : "None"; }'); do
         keyValueArray[$line]=$((keyValueArray[$line]+1))
     done
 }
@@ -427,7 +427,7 @@ Monthly() {
 
 
 Yearly() {
-    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($2) != 0) ? $2 : "None";} }' | awk -F "-" '{ print (length($1) != 0) ? $1 : "None"; }'); do
+    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($2) != 0) ? $2 : "None";} }' | awk -F "-" '{ print (length($1) != 0) ? $1 : "None"; }'); do
         keyValueArray[$line]=$((keyValueArray[$line]+1))
     done
 }
@@ -436,7 +436,7 @@ Yearly() {
 
 
 Districts() {
-    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($6) != 0) ? $6 : "None";} }'); do
+    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($6) != 0) ? $6 : "None";} }'); do
         keyValueArray[$line]=$((keyValueArray[$line]+1))
     done
 }
@@ -445,7 +445,7 @@ Districts() {
 
 
 Regions() {
-    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($5) != 0) ? $5 : "None";} }'); do
+    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($5) != 0) ? $5 : "None";} }'); do
         keyValueArray[$line]=$((keyValueArray[$line]+1))
     done
 }
@@ -453,7 +453,7 @@ Regions() {
 
 
 Countries() {
-    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($8) != 0) ? $8 : "None";} }'); do
+    for line in $($1 | awk -F "," -v a=$a -v ta=$TIMEAFTER -v b=$b -v tb=$TIMEBEFORE -v g=$g -v gender=$GENDER 'NR != 1 { error=0; if ( ! /^\s*$/ && strftime("%Y-%m-%d",mktime(gensub(/^\s*(.{4})-(..)-(..)\s*$/,"\\1 \\2 \\3 0 0 0 ",1,$2))) != $2) { error++; print ("Invalid date: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && $3 !~ /^\s*[0-9]*\s*$/) { error++; print ("Invalid age: "$1","$2","$3","$4","$5","$6","$7","$8","$9) > "/dev/stderr" }; if ( ! /^\s*$/ && error == 0 && (a==0 || (a==1 && $2 >= ta)) && (b==0 || (b==1 && $2 <= tb)) && (g==0 || (g==1 && $4 == gender)) ) { print (length($8) != 0) ? $8 : "None";} }'); do
         keyValueArray[$line]=$((keyValueArray[$line]+1))
     done
 }
